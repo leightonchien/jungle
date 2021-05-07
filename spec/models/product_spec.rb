@@ -33,9 +33,12 @@ require 'rails_helper'
           @product.price = 10000
           @product.quantity = 10000
           @product.category_id = @category
+          @product.save
     
           @category.products = [@product]
-    
+
+          expect(@product.errors.full_messages.length == 1)
+          expect(@product.errors.full_messages[0] == "Name can't be blank")
           expect(@product).to_not be_valid
         end
     
@@ -49,10 +52,14 @@ require 'rails_helper'
           @product.quantity = 1
           @product.price = nil
           @product.category_id = @category
+          @product.save
     
           @category.products = [@product]
     
+          expect(@product.errors.full_messages.length == 1)
+          expect(@product.errors.full_messages[0] == "Price can't be blank")
           expect(@product).to_not be_valid
+
         end
     
         it "is not valid without a quantity" do
@@ -65,10 +72,14 @@ require 'rails_helper'
           @product.price = 1
           @product.quantity = nil
           @product.category_id = @category
+          @product.save
     
           @category.products = [@product]
     
+          expect(@product.errors.full_messages.length == 1)
+          expect(@product.errors.full_messages[0]).to eql("Quantity can't be blank")
           expect(@product).to_not be_valid
+
         end
     
         it "is not valid without a category" do
@@ -81,10 +92,14 @@ require 'rails_helper'
           @product.price = 1
           @product.quantity = 1
           @product.category_id = nil
+          @product.save
     
           @category = [@product]
     
+          expect(@product.errors.full_messages.length == 1)
+          expect(@product.errors.full_messages[0]).to eql("Category can't be blank")
           expect(@product).to_not be_valid
+          
         end
       end
     end 
